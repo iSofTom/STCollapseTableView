@@ -117,40 +117,49 @@
         
 		[self setSectionAtIndex:sectionIndex open:YES];
 		[self setSectionAtIndex:openedSection open:NO];
-		
-		NSArray* indexPathsToInsert = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
-		NSArray* indexPathsToDelete = [self indexPathsForRowsInSectionAtIndex:openedSection];
-		
-		UITableViewRowAnimation insertAnimation;
-		UITableViewRowAnimation deleteAnimation;
-		
-		if (openedSection == NSNotFound || sectionIndex < openedSection)
-        {
-			insertAnimation = UITableViewRowAnimationTop;
-			deleteAnimation = UITableViewRowAnimationBottom;
-		}
+        
+        if(animated)
+		{
+            NSArray* indexPathsToInsert = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
+            NSArray* indexPathsToDelete = [self indexPathsForRowsInSectionAtIndex:openedSection];
+            
+            UITableViewRowAnimation insertAnimation;
+            UITableViewRowAnimation deleteAnimation;
+            
+            if (openedSection == NSNotFound || sectionIndex < openedSection)
+            {
+                insertAnimation = UITableViewRowAnimationTop;
+                deleteAnimation = UITableViewRowAnimationBottom;
+            }
+            else
+            {
+                insertAnimation = UITableViewRowAnimationBottom;
+                deleteAnimation = UITableViewRowAnimationTop;
+            }
+            
+            [self beginUpdates];
+            [self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
+            [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
+            [self endUpdates];
+        }
         else
         {
-			insertAnimation = UITableViewRowAnimationBottom;
-			deleteAnimation = UITableViewRowAnimationTop;
-		}
-		
-		[self beginUpdates];
-		[self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
-		[self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
-		[self endUpdates];
-		
+            [self reloadData];
+        }
 	}
     else
     {
 		[self setSectionAtIndex:sectionIndex open:YES];
 		
-		NSArray* indexPathsToInsert = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
-		
-		UITableViewRowAnimation insertAnimation = UITableViewRowAnimationTop;
-		
-		[self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
-		
+		if (animated)
+        {
+            NSArray* indexPathsToInsert = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
+            [self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:UITableViewRowAnimationTop];
+        }
+        else
+        {
+            [self reloadData];
+        }
 	}
 }
 
@@ -158,9 +167,15 @@
 {
     [self setSectionAtIndex:sectionIndex open:NO];
 	
-	NSArray* indexPathsToDelete = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
-	
-	[self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
+	if (animated)
+    {
+        NSArray* indexPathsToDelete = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
+        [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
+    }
+    else
+    {
+        [self reloadData];
+    }
 }
 
 - (void)toggleSection:(NSUInteger)sectionIndex animated:(BOOL)animated
@@ -182,7 +197,7 @@
 	}
 }
 
-- (BOOL)isOpenedSection:(NSUInteger)sectionIndex
+- (BOOL)isOpenSection:(NSUInteger)sectionIndex
 {
     if (sectionIndex >= [self.sectionsStates count])
     {

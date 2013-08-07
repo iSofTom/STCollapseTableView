@@ -13,6 +13,7 @@
 @interface RollViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet STRollTableView *tableView;
+@property (weak, nonatomic) IBOutlet UISwitch *animatedSwitch;
 
 @property (nonatomic, strong) NSMutableArray* data;
 @property (nonatomic, strong) NSMutableArray* headers;
@@ -83,14 +84,16 @@
     double delayInSeconds = 0.5;
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self.tableView openSection:0 animated:NO];
+        [self.tableView openSection:0 animated:YES];
     });
     
 }
 
-- (IBAction)handleExclusiveButtonTap:(id)sender
+- (IBAction)handleExclusiveButtonTap:(UIButton*)button
 {
     [self.tableView setExclusiveSections:!self.tableView.exclusiveSections];
+    
+    [button setTitle:self.tableView.exclusiveSections?@"exclusive":@"!exclusive" forState:UIControlStateNormal];
 }
 
 - (IBAction)handleEditButtonTap:(id)sender
@@ -100,7 +103,7 @@
 
 - (void)handleHeaderTap:(UITapGestureRecognizer*)tap
 {
-    [self.tableView toggleSection:tap.view.tag animated:YES];
+    [self.tableView toggleSection:tap.view.tag animated:[self.animatedSwitch isOn]];
 }
 
 - (void)handleHeaderLongPress:(UILongPressGestureRecognizer*)longPress
