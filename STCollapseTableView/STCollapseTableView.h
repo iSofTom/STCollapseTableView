@@ -46,6 +46,13 @@
 @property (nonatomic, assign) BOOL exclusiveSections;
 
 /**
+ *	This property allows STCollapseTableView to automatically handle tap on headers in order to collapse or expand sections.
+ *  If NO, you'll have to manually call the open or close methods if you want any content to be displayed.
+ *  Default value is YES.
+ */
+@property (nonatomic, assign) BOOL shouldHandleHeadersTap;
+
+/**
  *	This method will display the section whose index is in parameters
  *  If exclusiveSections boolean is YES, this method will close any open section.
  *

@@ -30,9 +30,12 @@
 
 #import "STCollapseTableView.h"
 
-@interface STCollapseTableView () <UITableViewDataSource>
+#import <objc/runtime.h>
+
+@interface STCollapseTableView () <UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic, strong) id<UITableViewDataSource> collapseDataSource;
+@property (nonatomic, strong) id<UITableViewDelegate> collapseDelegate;
 @property (nonatomic, strong) NSMutableArray* sectionsStates;
 
 @end
@@ -72,6 +75,7 @@
 - (void)setupCollapseTableView
 {
 	self.exclusiveSections = YES;
+    self.shouldHandleHeadersTap = YES;
 	self.sectionsStates = [[NSMutableArray alloc] init];
 }
 
@@ -85,18 +89,36 @@
 	}
 }
 
+- (void)setDelegate:(id<UITableViewDelegate>)newDelegate
+{
+    if (newDelegate != self.collapseDelegate)
+    {
+        self.collapseDelegate = newDelegate;
+        [super setDelegate:self.collapseDelegate?self:nil];
+    }
+}
+
 - (id)forwardingTargetForSelector:(SEL)aSelector
 {
 	if ([self.collapseDataSource respondsToSelector:aSelector])
     {
 		return self.collapseDataSource;
 	}
+    if ([self.collapseDelegate respondsToSelector:aSelector])
+    {
+        return self.collapseDelegate;
+    }
 	return nil;
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector
 {
-	return [super respondsToSelector:aSelector] || [self.collapseDataSource respondsToSelector:aSelector];
+    if (sel_isEqual(aSelector, @selector(tableView:viewForHeaderInSection:)))
+    {
+        return [self.collapseDelegate respondsToSelector:aSelector];
+    }
+    
+	return [super respondsToSelector:aSelector] || [self.collapseDataSource respondsToSelector:aSelector] || [self.collapseDelegate respondsToSelector:aSelector];
 }
 
 - (void)openSection:(NSUInteger)sectionIndex animated:(BOOL)animated
@@ -264,7 +286,45 @@
 	return nbSection;
 }
 
+#pragma mark - Delegate
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    UIView* view = [self.collapseDelegate tableView:tableView viewForHeaderInSection:section];
+    
+    if (self.shouldHandleHeadersTap)
+    {
+        NSArray* gestures = view.gestureRecognizers;
+        BOOL tapGestureFound = NO;
+        for (UIGestureRecognizer* gesture in gestures)
+        {
+            if ([gesture isKindOfClass:[UITapGestureRecognizer class]])
+            {
+                tapGestureFound = YES;
+                break;
+            }
+        }
+        
+        if (!tapGestureFound)
+        {
+            [view setTag:section];
+            [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)]];
+        }
+    }
+    
+    return view;
+}
+
 #pragma mark - Private methods
+
+- (void)handleTapGesture:(UITapGestureRecognizer*)tap
+{
+    NSInteger index = tap.view.tag;
+    if (index >= 0)
+    {
+        [self toggleSection:(NSUInteger)index animated:YES];
+    }
+}
 
 - (NSArray*)indexPathsForRowsInSectionAtIndex:(NSUInteger)sectionIndex
 {

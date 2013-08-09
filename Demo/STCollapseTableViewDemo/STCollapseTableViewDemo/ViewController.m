@@ -13,7 +13,6 @@
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet STCollapseTableView *tableView;
-@property (weak, nonatomic) IBOutlet UISwitch *animatedSwitch;
 
 @property (nonatomic, strong) NSMutableArray* data;
 @property (nonatomic, strong) NSMutableArray* headers;
@@ -27,7 +26,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
-        [self setupRollViewController];
+        [self setupViewController];
     }
     return self;
 }
@@ -37,42 +36,36 @@
     self = [super initWithCoder:aDecoder];
     if (self)
     {
-        [self setupRollViewController];
+        [self setupViewController];
     }
     return self;
 }
 
-- (void)setupRollViewController
+- (void)setupViewController
 {
-    NSArray* colors = @[[UIColor purpleColor],
-                        [UIColor blueColor],
-                        [UIColor greenColor],
+    NSArray* colors = @[[UIColor redColor],
+                        [UIColor orangeColor],
                         [UIColor yellowColor],
-                        [UIColor orangeColor]];
+                        [UIColor greenColor],
+                        [UIColor blueColor],
+                        [UIColor purpleColor]];
     
     self.data = [[NSMutableArray alloc] init];
-    
     for (int i = 0 ; i < [colors count] ; i++)
     {
         NSMutableArray* section = [[NSMutableArray alloc] init];
-        
         for (int j = 0 ; j < 3 ; j++)
         {
             [section addObject:[NSString stringWithFormat:@"Cell n°%i", j]];
         }
-        
         [self.data addObject:section];
     }
     
     self.headers = [[NSMutableArray alloc] init];
-    
     for (int i = 0 ; i < [colors count] ; i++)
     {
         UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
         [header setBackgroundColor:[colors objectAtIndex:i]];
-        [header setTag:i];
-        [header addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderTap:)]];
-        [header addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleHeaderLongPress:)]];
         [self.headers addObject:header];
     }
 }
@@ -81,12 +74,8 @@
 {
     [super viewDidLoad];
     
-    double delayInSeconds = 0.5;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        [self.tableView openSection:0 animated:YES];
-    });
-    
+    [self.tableView reloadData];
+    [self.tableView openSection:0 animated:NO];
 }
 
 - (IBAction)handleExclusiveButtonTap:(UIButton*)button
@@ -94,26 +83,6 @@
     [self.tableView setExclusiveSections:!self.tableView.exclusiveSections];
     
     [button setTitle:self.tableView.exclusiveSections?@"exclusive":@"!exclusive" forState:UIControlStateNormal];
-}
-
-- (void)handleHeaderTap:(UITapGestureRecognizer*)tap
-{
-    [self.tableView toggleSection:tap.view.tag animated:[self.animatedSwitch isOn]];
-}
-
-- (void)handleHeaderLongPress:(UILongPressGestureRecognizer*)longPress
-{
-    if (longPress.state == UIGestureRecognizerStateBegan)
-    {
-        NSInteger index = longPress.view.tag;
-        
-        if (index >= 0 && index < [self.data count])
-        {
-            [[self.data objectAtIndex:index] insertObject:@"New cell" atIndex:0];
-            NSIndexPath* indexPath = [NSIndexPath indexPathForRow:0 inSection:index];
-            [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
-        }
-    }
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -151,12 +120,6 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     return [self.headers objectAtIndex:section];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	[[self.data objectAtIndex:indexPath.section] removeObjectAtIndex:indexPath.row];
-	[self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
 }
 
 @end
