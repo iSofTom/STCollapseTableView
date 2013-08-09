@@ -1,24 +1,23 @@
 //
 //  AppDelegate.m
-//  TestsSTRollTableView
+//  STCollapseTableViewDemo
 //
-//  Created by Thomas Dupont on 07/08/13.
+//  Created by Thomas Dupont on 09/08/13.
 //  Copyright (c) 2013 iSofTom. All rights reserved.
 //
 
 #import "AppDelegate.h"
 
-#import "RollViewController.h"
+#import "ViewController.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    RollViewController* viewController = [[RollViewController alloc] init];
-    self.window.rootViewController = viewController;
-    
+    // Override point for customization after application launch.
+    self.viewController = [[ViewController alloc] initWithNibName:@"ViewController" bundle:nil];
+    self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
     return YES;
 }

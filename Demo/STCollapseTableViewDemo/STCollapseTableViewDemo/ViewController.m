@@ -1,18 +1,18 @@
 //
 //  ViewController.m
-//  TestsSTRollTableView
+//  STCollapseTableViewDemo
 //
-//  Created by Thomas Dupont on 07/08/13.
+//  Created by Thomas Dupont on 09/08/13.
 //  Copyright (c) 2013 iSofTom. All rights reserved.
 //
 
-#import "RollViewController.h"
+#import "ViewController.h"
 
-#import "STRollTableView.h"
+#import "STCollapseTableView.h"
 
-@interface RollViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (weak, nonatomic) IBOutlet STRollTableView *tableView;
+@property (weak, nonatomic) IBOutlet STCollapseTableView *tableView;
 @property (weak, nonatomic) IBOutlet UISwitch *animatedSwitch;
 
 @property (nonatomic, strong) NSMutableArray* data;
@@ -20,7 +20,7 @@
 
 @end
 
-@implementation RollViewController
+@implementation ViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -94,11 +94,6 @@
     [self.tableView setExclusiveSections:!self.tableView.exclusiveSections];
     
     [button setTitle:self.tableView.exclusiveSections?@"exclusive":@"!exclusive" forState:UIControlStateNormal];
-}
-
-- (IBAction)handleEditButtonTap:(id)sender
-{
-    
 }
 
 - (void)handleHeaderTap:(UITapGestureRecognizer*)tap

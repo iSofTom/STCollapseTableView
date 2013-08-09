@@ -1,6 +1,6 @@
 //
-//  STRollTableView.h
-//  STRollTableView
+//  STCollapseTableView.h
+//  STCollapseTableView
 //
 //  Created by Thomas Dupont on 07/08/13.
 
@@ -31,16 +31,16 @@
 #import <UIKit/UIKit.h>
 
 /**
- *	STRollTableView is a UITableView subclass that automatically handle opening and closing of the sections.
+ *	STCollapseTableView is a UITableView subclass that automatically collapse and/or expand your sections.
  *
  *  Just fill your datasource like for any table view and the magic will happen.
  *  By default all the sections are closed.
  */
-@interface STRollTableView : UITableView
+@interface STCollapseTableView : UITableView
 
 /**
  *	This property allow to enable/disable the exclusivity.
- *  If YES, only a section is allowed to be open.
+ *  If YES, only one section is allowed to be open.
  *  Default value is YES.
  */
 @property (nonatomic, assign) BOOL exclusiveSections;

@@ -1,6 +1,6 @@
 //
-//  STRollTableView.m
-//  STRollTableView
+//  STCollapseTableView.m
+//  STCollapseTableView
 //
 //  Created by Thomas Dupont on 07/08/13.
 
@@ -28,23 +28,23 @@
  *
  ***********************************************************************************/
 
-#import "STRollTableView.h"
+#import "STCollapseTableView.h"
 
-@interface STRollTableView () <UITableViewDataSource>
+@interface STCollapseTableView () <UITableViewDataSource>
 
-@property (nonatomic, strong) id<UITableViewDataSource> rollingDataSource;
+@property (nonatomic, strong) id<UITableViewDataSource> collapseDataSource;
 @property (nonatomic, strong) NSMutableArray* sectionsStates;
 
 @end
 
-@implementation STRollTableView
+@implementation STCollapseTableView
 
 - (id)initWithCoder:(NSCoder *)aDecoder
 {
 	self = [super initWithCoder:aDecoder];
 	if (self)
     {
-		[self setup];
+		[self setupCollapseTableView];
 	}
 	return self;
 }
@@ -54,7 +54,7 @@
 	self = [super initWithFrame:frame];
 	if (self)
     {
-		[self setup];
+		[self setupCollapseTableView];
 	}
 	return self;
 }
@@ -64,12 +64,12 @@
 	self = [super initWithFrame:frame style:style];
 	if (self)
     {
-		[self setup];
+		[self setupCollapseTableView];
 	}
 	return self;
 }
 
-- (void)setup
+- (void)setupCollapseTableView
 {
 	self.exclusiveSections = YES;
 	self.sectionsStates = [[NSMutableArray alloc] init];
@@ -77,26 +77,26 @@
 
 - (void)setDataSource:(id <UITableViewDataSource>)newDataSource
 {
-	if (newDataSource != self.rollingDataSource)
+	if (newDataSource != self.collapseDataSource)
     {
-		self.rollingDataSource = newDataSource;
+		self.collapseDataSource = newDataSource;
 		[self.sectionsStates removeAllObjects];
-		[super setDataSource:self.rollingDataSource?self:nil];
+		[super setDataSource:self.collapseDataSource?self:nil];
 	}
 }
 
 - (id)forwardingTargetForSelector:(SEL)aSelector
 {
-	if ([self.rollingDataSource respondsToSelector:aSelector])
+	if ([self.collapseDataSource respondsToSelector:aSelector])
     {
-		return self.rollingDataSource;
+		return self.collapseDataSource;
 	}
 	return nil;
 }
 
 - (BOOL)respondsToSelector:(SEL)aSelector
 {
-	return [super respondsToSelector:aSelector] || [self.rollingDataSource respondsToSelector:aSelector];
+	return [super respondsToSelector:aSelector] || [self.collapseDataSource respondsToSelector:aSelector];
 }
 
 - (void)openSection:(NSUInteger)sectionIndex animated:(BOOL)animated
@@ -235,21 +235,21 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	return [self.rollingDataSource tableView:tableView cellForRowAtIndexPath:indexPath];
+	return [self.collapseDataSource tableView:tableView cellForRowAtIndexPath:indexPath];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	if ([[self.sectionsStates objectAtIndex:section] boolValue])
     {
-		return [self.rollingDataSource tableView:tableView numberOfRowsInSection:section];
+		return [self.collapseDataSource tableView:tableView numberOfRowsInSection:section];
 	}
 	return 0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	int nbSection = [self.rollingDataSource numberOfSectionsInTableView:tableView];
+	int nbSection = [self.collapseDataSource numberOfSectionsInTableView:tableView];
     
 	while (nbSection < [self.sectionsStates count])
     {
@@ -273,7 +273,7 @@
 		return nil;
 	}
 	
-	NSInteger numberOfRows = [self.rollingDataSource tableView:self numberOfRowsInSection:sectionIndex];
+	NSInteger numberOfRows = [self.collapseDataSource tableView:self numberOfRowsInSection:sectionIndex];
 	
 	NSMutableArray* array = [[NSMutableArray alloc] init];
 	

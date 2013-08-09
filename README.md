@@ -16,7 +16,7 @@ But you have now access to several new table view methods:
 - (void)toggleSection:(NSUInteger)sectionIndex animated:(BOOL)animated;
 - (BOOL)isOpenSection:(NSUInteger)sectionIndex;
 ```
-As their names suggests, those methods allows to open or close a section and can animated or not. The last one returns a boolean to know if a section is currently open.
+As their names suggests, those methods allows to open or close a section and can be animated or not. The last one returns a boolean to know if a section is currently open.
 
 By default if you open a section, any other that is open will be automatically closed.
 This can be prevented by setting this property to NO:
