@@ -5,7 +5,7 @@ A UITableView subclass that automatically collapse and/or expand your sections.
 
 You just have to fill your datasource like for a classic UITableView and the magic will happen.
 
-## How to
+## How to use it ?
 
 By default all the sections are closed, so no rows will be displayed !
 But you have now access to several new table view methods:
@@ -42,3 +42,12 @@ This is automatically done for you in three conditions:
 * Your datasource implements the `tableView:heightForHeaderInSection:` method
 * The returned views haven't any UITapGestureRecognizer.
 * the STCollapseTableView property `shouldHandleHeadersTap` is YES (which is the default value).
+
+## Installation
+
+To include this component in your project, I recommend you to use [Cocoapods](http://cocoapods.org):
+* Add `pod "STCollapseTableView"` to your Podfile.
+
+## How does it work ?
+
+Here is an article about how this component works : [Forwarding Mechanism](http://www.isoftom.com/2013/08/forwarding-mechanism.html).
