@@ -34,8 +34,8 @@
 
 @interface STCollapseTableView () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong) id<UITableViewDataSource> collapseDataSource;
-@property (nonatomic, strong) id<UITableViewDelegate> collapseDelegate;
+@property (nonatomic, assign) id<UITableViewDataSource> collapseDataSource;
+@property (nonatomic, assign) id<UITableViewDelegate> collapseDelegate;
 @property (nonatomic, strong) NSMutableArray* sectionsStates;
 
 @end
