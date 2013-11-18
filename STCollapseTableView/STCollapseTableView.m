@@ -132,7 +132,12 @@
     {
         return;
     }
-	
+    
+    if ([self.delegate respondsToSelector:@selector(didToggleSection:collapsed:)])
+    {
+        [self.collapseSectionDelegate didToggleSection:sectionIndex collapsed:NO];
+    }
+    
 	if (self.exclusiveSections)
     {
         NSUInteger openedSection = [self openedSection];
@@ -188,7 +193,10 @@
 - (void)closeSection:(NSUInteger)sectionIndex animated:(BOOL)animated
 {
     [self setSectionAtIndex:sectionIndex open:NO];
-	
+    if ([self.delegate respondsToSelector:@selector(didToggleSection:collapsed:)])
+    {
+        [self.collapseSectionDelegate didToggleSection:sectionIndex collapsed:YES];
+    }
 	if (animated)
     {
         NSArray* indexPathsToDelete = [self indexPathsForRowsInSectionAtIndex:sectionIndex];

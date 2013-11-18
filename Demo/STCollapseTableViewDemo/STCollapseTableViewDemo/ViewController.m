@@ -10,12 +10,13 @@
 
 #import "STCollapseTableView.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate, STCollapseTableViewSectionDelegate>
 
 @property (weak, nonatomic) IBOutlet STCollapseTableView *tableView;
 
 @property (nonatomic, strong) NSMutableArray* data;
 @property (nonatomic, strong) NSMutableArray* headers;
+@property (nonatomic, strong) NSArray*        colors;
 
 @end
 
@@ -43,15 +44,15 @@
 
 - (void)setupViewController
 {
-    NSArray* colors = @[[UIColor redColor],
-                        [UIColor orangeColor],
-                        [UIColor yellowColor],
-                        [UIColor greenColor],
-                        [UIColor blueColor],
-                        [UIColor purpleColor]];
+    self.colors = @[[UIColor redColor],
+                    [UIColor orangeColor],
+                    [UIColor yellowColor],
+                    [UIColor greenColor],
+                    [UIColor blueColor],
+                    [UIColor purpleColor]];
     
     self.data = [[NSMutableArray alloc] init];
-    for (int i = 0 ; i < [colors count] ; i++)
+    for (int i = 0 ; i < [self.colors count] ; i++)
     {
         NSMutableArray* section = [[NSMutableArray alloc] init];
         for (int j = 0 ; j < 3 ; j++)
@@ -62,10 +63,10 @@
     }
     
     self.headers = [[NSMutableArray alloc] init];
-    for (int i = 0 ; i < [colors count] ; i++)
+    for (int i = 0 ; i < [self.colors count] ; i++)
     {
         UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-        [header setBackgroundColor:[colors objectAtIndex:i]];
+        [header setBackgroundColor:[self.colors objectAtIndex:i]];
         [self.headers addObject:header];
     }
 }
@@ -73,7 +74,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    self.tableView.collapseSectionDelegate = self;
     [self.tableView reloadData];
     [self.tableView openSection:0 animated:NO];
 }
@@ -120,6 +121,23 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     return [self.headers objectAtIndex:section];
+}
+
+#pragma mark - STCollapseTableViewDelegate
+
+-(void)didToggleSection:(NSUInteger)sectionIndex collapsed:(BOOL)collapsed
+{
+    UIView* headerView = [self.headers objectAtIndex:sectionIndex];
+    
+    if (collapsed)
+    {
+        headerView.backgroundColor = [self.colors objectAtIndex:sectionIndex];
+    }
+    else
+    {
+        headerView.backgroundColor = [UIColor grayColor];
+    }
+    
 }
 
 @end
