@@ -315,10 +315,10 @@
         
         if (!tapGestureFound)
         {
-            [view setTag:section];
             [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)]];
         }
     }
+    [view setTag:section];
     
     return view;
 }
