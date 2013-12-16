@@ -57,6 +57,12 @@
 @property (nonatomic, assign) BOOL exclusiveSections;
 
 /**
+ * This property allow to customize UITableViewRowAnimation on collapsing
+ * Default value is UITableViewRowAnimationTop
+ */
+@property (nonatomic, assign) UITableViewRowAnimation collapseRowsAnimation;
+
+/**
  *	This property allows STCollapseTableView to automatically handle tap on headers in order to collapse or expand sections.
  *  If NO, you'll have to manually call the open or close methods if you want any content to be displayed.
  *  Default value is YES.
@@ -96,5 +102,12 @@
  *	@return	YES if the section is open.
  */
 - (BOOL)isOpenSection:(NSUInteger)sectionIndex;
+
+/**
+ * This methods will close all sections if table is not in exclusiveSections mode
+ * (for a reload data for instance)
+ *
+ */
+- (void)closeAllSections;
 
 @end

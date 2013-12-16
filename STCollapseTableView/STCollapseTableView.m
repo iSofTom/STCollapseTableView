@@ -77,6 +77,7 @@
 	self.exclusiveSections = YES;
     self.shouldHandleHeadersTap = YES;
 	self.sectionsStates = [[NSMutableArray alloc] init];
+    self.collapseRowsAnimation = UITableViewRowAnimationTop;
 }
 
 - (void)setDataSource:(id <UITableViewDataSource>)newDataSource
@@ -200,7 +201,7 @@
 	if (animated)
     {
         NSArray* indexPathsToDelete = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
-        [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
+        [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:self.collapseRowsAnimation];
     }
     else
     {
@@ -317,8 +318,8 @@
         {
             [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)]];
         }
+        [view setTag:section];
     }
-    [view setTag:section];
     
     return view;
 }
@@ -379,6 +380,22 @@
     }
     
     return NSNotFound;
+}
+
+-(void)closeAllSections
+{
+    if (!self.exclusiveSections)
+    {
+        for (NSUInteger index = 0 ; index < [self.sectionsStates count] ; index++)
+        {
+            if ([[self.sectionsStates objectAtIndex:index] boolValue])
+            {
+                [self closeSection:index animated:YES];
+                
+            }
+        }
+    }
+    
 }
 
 @end
