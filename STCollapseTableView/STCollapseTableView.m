@@ -382,7 +382,7 @@
     return NSNotFound;
 }
 
--(void)closeAllSections
+-(void)closeAllSectionsAnimated:(BOOL)animated
 {
     if (!self.exclusiveSections)
     {
@@ -390,7 +390,7 @@
         {
             if ([[self.sectionsStates objectAtIndex:index] boolValue])
             {
-                [self closeSection:index animated:YES];
+                [self closeSection:index animated:animated];
                 
             }
         }

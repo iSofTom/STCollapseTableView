@@ -108,6 +108,6 @@
  * (for a reload data for instance)
  *
  */
-- (void)closeAllSections;
+-(void)closeAllSectionsAnimated:(BOOL)animated;
 
 @end
