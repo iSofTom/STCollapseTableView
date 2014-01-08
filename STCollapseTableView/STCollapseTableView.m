@@ -134,11 +134,6 @@
         return;
     }
     
-    if ([self.delegate respondsToSelector:@selector(didToggleSection:collapsed:)])
-    {
-        [self.collapseSectionDelegate didToggleSection:sectionIndex collapsed:NO];
-    }
-    
 	if (self.exclusiveSections)
     {
         NSUInteger openedSection = [self openedSection];
@@ -189,6 +184,11 @@
             [self reloadData];
         }
 	}
+    
+    if ([self.delegate respondsToSelector:@selector(didToggleSection:collapsed:)])
+    {
+        [self.collapseSectionDelegate didToggleSection:sectionIndex collapsed:NO];
+    }
 }
 
 - (void)closeSection:(NSUInteger)sectionIndex animated:(BOOL)animated
