@@ -77,6 +77,7 @@
 	self.exclusiveSections = YES;
     self.shouldHandleHeadersTap = YES;
 	self.sectionsStates = [[NSMutableArray alloc] init];
+    self.collapseRowsAnimation = UITableViewRowAnimationTop;
 }
 
 - (void)setDataSource:(id <UITableViewDataSource>)newDataSource
@@ -132,7 +133,7 @@
     {
         return;
     }
-	
+    
 	if (self.exclusiveSections)
     {
         NSUInteger openedSection = [self openedSection];
@@ -183,16 +184,24 @@
             [self reloadData];
         }
 	}
+    
+    if ([self.delegate respondsToSelector:@selector(didToggleSection:collapsed:)])
+    {
+        [self.collapseSectionDelegate didToggleSection:sectionIndex collapsed:NO];
+    }
 }
 
 - (void)closeSection:(NSUInteger)sectionIndex animated:(BOOL)animated
 {
     [self setSectionAtIndex:sectionIndex open:NO];
-	
+    if ([self.delegate respondsToSelector:@selector(didToggleSection:collapsed:)])
+    {
+        [self.collapseSectionDelegate didToggleSection:sectionIndex collapsed:YES];
+    }
 	if (animated)
     {
         NSArray* indexPathsToDelete = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
-        [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:UITableViewRowAnimationTop];
+        [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:self.collapseRowsAnimation];
     }
     else
     {
@@ -307,9 +316,9 @@
         
         if (!tapGestureFound)
         {
-            [view setTag:section];
             [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)]];
         }
+        [view setTag:section];
     }
     
     return view;
@@ -371,6 +380,22 @@
     }
     
     return NSNotFound;
+}
+
+-(void)closeAllSectionsAnimated:(BOOL)animated
+{
+    if (!self.exclusiveSections)
+    {
+        for (NSUInteger index = 0 ; index < [self.sectionsStates count] ; index++)
+        {
+            if ([[self.sectionsStates objectAtIndex:index] boolValue])
+            {
+                [self closeSection:index animated:animated];
+                
+            }
+        }
+    }
+    
 }
 
 @end
