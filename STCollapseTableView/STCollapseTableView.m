@@ -34,8 +34,8 @@
 
 @interface STCollapseTableView () <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, assign) id<UITableViewDataSource> collapseDataSource;
-@property (nonatomic, assign) id<UITableViewDelegate> collapseDelegate;
+@property (nonatomic, weak) id<UITableViewDataSource> collapseDataSource;
+@property (nonatomic, weak) id<UITableViewDelegate> collapseDelegate;
 @property (nonatomic, strong) NSMutableArray* sectionsStates;
 
 @end
@@ -253,6 +253,23 @@
     }
 }
 
+#pragma mark managing section updates (overload table view a bit...)
+
+- (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+    [self.sectionsStates removeObjectsAtIndexes: sections];
+    [super deleteSections:sections withRowAnimation:animation];
+}
+
+- (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+    [sections enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        [self.sectionsStates insertObject:@NO atIndex:idx];
+    }];
+    
+    [super insertSections:sections withRowAnimation:animation];
+}
+
 #pragma mark - DataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -271,7 +288,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	int nbSection = [self.collapseDataSource numberOfSectionsInTableView:tableView];
+	NSInteger nbSection = [self.collapseDataSource numberOfSectionsInTableView:tableView];
     
 	while (nbSection < [self.sectionsStates count])
     {
