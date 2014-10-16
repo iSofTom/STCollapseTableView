@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		41DC336A19EFBAE000199D8C /* CustomHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 41DC336919EFBAE000199D8C /* CustomHeaderView.m */; };
+		41DC336C19EFC15F00199D8C /* CustomHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 41DC336B19EFC15F00199D8C /* CustomHeaderView.xib */; };
 		9A519E7C17B5006A00B5C3AD /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A519E7B17B5006A00B5C3AD /* UIKit.framework */; };
 		9A519E7E17B5006A00B5C3AD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A519E7D17B5006A00B5C3AD /* Foundation.framework */; };
 		9A519E8017B5006A00B5C3AD /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A519E7F17B5006A00B5C3AD /* CoreGraphics.framework */; };
@@ -22,6 +24,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		41DC336819EFBAE000199D8C /* CustomHeaderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHeaderView.h; sourceTree = "<group>"; };
+		41DC336919EFBAE000199D8C /* CustomHeaderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHeaderView.m; sourceTree = "<group>"; };
+		41DC336B19EFC15F00199D8C /* CustomHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CustomHeaderView.xib; sourceTree = "<group>"; };
 		9A519E7817B5006A00B5C3AD /* STCollapseTableViewDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = STCollapseTableViewDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A519E7B17B5006A00B5C3AD /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		9A519E7D17B5006A00B5C3AD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -92,6 +97,9 @@
 				9A519E9317B5006A00B5C3AD /* ViewController.h */,
 				9A519E9417B5006A00B5C3AD /* ViewController.m */,
 				9A519E9617B5006A00B5C3AD /* ViewController.xib */,
+				41DC336819EFBAE000199D8C /* CustomHeaderView.h */,
+				41DC336919EFBAE000199D8C /* CustomHeaderView.m */,
+				41DC336B19EFC15F00199D8C /* CustomHeaderView.xib */,
 				9A519E8217B5006A00B5C3AD /* Supporting Files */,
 			);
 			path = STCollapseTableViewDemo;
@@ -176,6 +184,7 @@
 				9A519E8E17B5006A00B5C3AD /* Default.png in Resources */,
 				9A519E9017B5006A00B5C3AD /* Default@2x.png in Resources */,
 				9A519E9217B5006A00B5C3AD /* Default-568h@2x.png in Resources */,
+				41DC336C19EFC15F00199D8C /* CustomHeaderView.xib in Resources */,
 				9A519E9817B5006A00B5C3AD /* ViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -191,6 +200,7 @@
 				9A519E8C17B5006A00B5C3AD /* AppDelegate.m in Sources */,
 				9A519E9517B5006A00B5C3AD /* ViewController.m in Sources */,
 				9A519EA117B5008500B5C3AD /* STCollapseTableView.m in Sources */,
+				41DC336A19EFBAE000199D8C /* CustomHeaderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
