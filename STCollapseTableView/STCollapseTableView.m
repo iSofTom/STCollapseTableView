@@ -206,7 +206,8 @@
     {
 		return;
 	}
-	
+
+
 	BOOL sectionIsOpen = [[self.sectionsStates objectAtIndex:sectionIndex] boolValue];
 	
 	if (sectionIsOpen)
@@ -271,7 +272,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	int nbSection = [self.collapseDataSource numberOfSectionsInTableView:tableView];
+	NSInteger nbSection = [self.collapseDataSource numberOfSectionsInTableView:tableView];
     
 	while (nbSection < [self.sectionsStates count])
     {
@@ -294,6 +295,8 @@
     
     if (self.shouldHandleHeadersTap)
     {
+        [view setTag:section];
+        
         NSArray* gestures = view.gestureRecognizers;
         BOOL tapGestureFound = NO;
         for (UIGestureRecognizer* gesture in gestures)
@@ -307,7 +310,6 @@
         
         if (!tapGestureFound)
         {
-            [view setTag:section];
             [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)]];
         }
     }
@@ -322,7 +324,7 @@
     NSInteger index = tap.view.tag;
     if (index >= 0)
     {
-        [self toggleSection:(NSUInteger)index animated:YES];
+        [self toggleSection:(NSUInteger)index animated:NO];
     }
 }
 

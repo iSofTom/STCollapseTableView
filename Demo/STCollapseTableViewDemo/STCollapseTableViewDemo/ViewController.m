@@ -19,13 +19,17 @@
 
 @end
 
-@implementation ViewController
+@implementation ViewController{
+    BOOL useReusableHeaders;
+    NSArray* colors;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self)
     {
+        useReusableHeaders = YES;
         [self setupViewController];
     }
     return self;
@@ -36,6 +40,7 @@
     self = [super initWithCoder:aDecoder];
     if (self)
     {
+        useReusableHeaders = YES;
         [self setupViewController];
     }
     return self;
@@ -43,12 +48,12 @@
 
 - (void)setupViewController
 {
-    NSArray* colors = @[[UIColor redColor],
-                        [UIColor orangeColor],
-                        [UIColor yellowColor],
-                        [UIColor greenColor],
-                        [UIColor blueColor],
-                        [UIColor purpleColor]];
+    colors = @[[UIColor redColor],
+               [UIColor orangeColor],
+               [UIColor yellowColor],
+               [UIColor greenColor],
+               [UIColor blueColor],
+               [UIColor purpleColor]];
     
     self.data = [[NSMutableArray alloc] init];
     for (int i = 0 ; i < [colors count] ; i++)
@@ -62,17 +67,35 @@
     }
     
     self.headers = [[NSMutableArray alloc] init];
-    for (int i = 0 ; i < [colors count] ; i++)
+    if( !useReusableHeaders)
     {
-        UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
-        [header setBackgroundColor:[colors objectAtIndex:i]];
-        [self.headers addObject:header];
+        for (int i = 0 ; i < [colors count] ; i++)
+        {
+            UIView* header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 40)];
+            [header setBackgroundColor:[colors objectAtIndex:i]];
+            [self.headers addObject:header];
+        }
     }
+}
+
+-(void)setupTableViewReusableViews
+{
+    if(useReusableHeaders)
+    {
+        for (int i = 0 ; i < [colors count] ; i++)
+        {
+            NSString *identifier = [NSString stringWithFormat:@"Header-Identifier-%d", i];
+            UINib *headerNib = [UINib nibWithNibName:@"CustomHeaderView" bundle:[NSBundle mainBundle]];
+            [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:identifier];
+        }
+    }
+
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupTableViewReusableViews];
     
     [self.tableView reloadData];
     [self.tableView openSection:0 animated:NO];
@@ -119,7 +142,18 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self.headers objectAtIndex:section];
+    if( !useReusableHeaders)
+    {
+        return [self.headers objectAtIndex:section];
+    }
+    else
+    {
+        NSString *identifier = [NSString stringWithFormat:@"Header-Identifier-%ld", section];
+        UITableViewHeaderFooterView *header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:identifier];
+        UIView *contentView = [[header subviews] firstObject];
+        [contentView setBackgroundColor:[colors objectAtIndex:section]];
+        return header;
+    }
 }
 
 @end
