@@ -41,8 +41,17 @@ As you might have seen, your headers automatically toggle theirs section on a ta
 This is automatically done for you in three conditions:
 * Your datasource implements the `tableView:heightForHeaderInSection:` method
 * The returned views haven't any UITapGestureRecognizer.
-* the STCollapseTableView property `shouldHandleHeadersTap` is YES (which is the default value).
+* the STCollapseTableView property `shouldHandleHeadersTap` is YES (which is the default value). 
 
+----
+```
+@property (nonatomic, weak) id<STCollapseTableViewDelegate> headerViewTapDelegate;
+```
+Just as the name, the herderViewTapDelegate is designed to handle hederViews tapping events, you can do things in the delegate method when a specified headerView tapped:     
+
+```
+- (void)STCollapseTableView:(STCollapseTableView *)STCollapseTableView didSelectHeaderViewAtSection:(NSInteger)section;
+```
 ## Installation
 
 To include this component in your project, I recommend you to use [Cocoapods](http://cocoapods.org):
