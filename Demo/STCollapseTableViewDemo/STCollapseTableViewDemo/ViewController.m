@@ -10,7 +10,7 @@
 
 #import "STCollapseTableView.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate, STCollapseTableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet STCollapseTableView *tableView;
 
@@ -74,6 +74,7 @@
 {
     [super viewDidLoad];
     
+    self.tableView.headerViewTapDelegate = self;
     [self.tableView reloadData];
     [self.tableView openSection:0 animated:NO];
 }
@@ -120,6 +121,16 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     return [self.headers objectAtIndex:section];
+}
+
+- (void)STCollapseTableView:(STCollapseTableView *)STCollapseTableView didSelectHeaderViewAtSection:(NSInteger)section
+{
+    [[[UIAlertView alloc] initWithTitle:@""
+                                message:[NSString stringWithFormat:@"headerView %ld tapped",section]
+                               delegate:nil
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil, nil]
+     show];
 }
 
 @end
