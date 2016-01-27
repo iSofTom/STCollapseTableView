@@ -253,6 +253,23 @@
     }
 }
 
+#pragma mark managing section updates (overload table view a bit...)
+
+- (void)deleteSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+    [self.sectionsStates removeObjectsAtIndexes: sections];
+    [super deleteSections:sections withRowAnimation:animation];
+}
+
+- (void)insertSections:(NSIndexSet *)sections withRowAnimation:(UITableViewRowAnimation)animation
+{
+    [sections enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        [self.sectionsStates insertObject:@NO atIndex:idx];
+    }];
+    
+    [super insertSections:sections withRowAnimation:animation];
+}
+
 #pragma mark - DataSource
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
