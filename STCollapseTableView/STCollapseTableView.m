@@ -307,9 +307,10 @@
         
         if (!tapGestureFound)
         {
-            [view setTag:section];
             [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)]];
         }
+        // Updating tag for reusable headers: https://github.com/iSofTom/STCollapseTableView/issues/6
+        [view setTag:section];
     }
     
     return view;
