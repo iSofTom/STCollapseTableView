@@ -24,7 +24,7 @@ so if you want the first section to be open after your view is loaded, you could
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     [self.tableView reloadData];
     [self.tableView openSection:0 animated:NO];
 }
@@ -43,6 +43,15 @@ This is automatically done for you in three conditions:
 * The returned views haven't any UITapGestureRecognizer.
 * the STCollapseTableView property `shouldHandleHeadersTap` is YES (which is the default value).
 
+----
+```
+@property (nonatomic, weak) id<STCollapseTableViewDelegate> headerViewTapDelegate;
+```
+Just as the name, the herderViewTapDelegate is designed to handle hederViews tapping events, you can do things in the delegate method when a specified headerView tapped:     
+
+```
+- (void)STCollapseTableView:(STCollapseTableView *)STCollapseTableView didSelectHeaderViewAtSection:(NSInteger)section;
+```
 ## Installation
 
 To include this component in your project, I recommend you to use [Cocoapods](http://cocoapods.org):
