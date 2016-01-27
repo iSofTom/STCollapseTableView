@@ -266,7 +266,7 @@
     [sections enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
         [self.sectionsStates insertObject:@NO atIndex:idx];
     }];
-    
+
     [super insertSections:sections withRowAnimation:animation];
 }
 
@@ -339,9 +339,9 @@
     NSInteger index = tap.view.tag;
     if (index >= 0)
     {
-        if([self.headerViewTapDelegate respondsToSelector:@selector(STCollapseTableView:didSelectHeaderViewAtSection:)])
+        if([self.headerViewTapDelegate respondsToSelector:@selector(collapseTableView:didSelectHeaderViewAtSection:)])
         {
-            [self.headerViewTapDelegate STCollapseTableView:self didSelectHeaderViewAtSection:index];
+            [self.headerViewTapDelegate collapseTableView:self didSelectHeaderViewAtSection:index];
         }
 
         [self toggleSection:(NSUInteger)index animated:YES];
