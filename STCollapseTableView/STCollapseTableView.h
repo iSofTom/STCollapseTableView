@@ -35,7 +35,8 @@
 
 @optional
 
-- (void)collapseTableView:(STCollapseTableView *)collapseTableView didSelectHeaderViewAtSection:(NSInteger)section;
+- (void)collapseTableView:(STCollapseTableView *)collapseTableView didOpenSection:(NSInteger)section;
+- (void)collapseTableView:(STCollapseTableView *)collapseTableView didCloseSection:(NSInteger)section;
 
 @end
 

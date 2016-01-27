@@ -133,6 +133,10 @@
         return;
     }
 
+    if ([self.headerViewTapDelegate respondsToSelector:@selector(collapseTableView:didOpenSection:)]) {
+        [self.headerViewTapDelegate collapseTableView:self didOpenSection:sectionIndex];
+    }
+
     if (self.exclusiveSections)
     {
         NSUInteger openedSection = [self openedSection];
@@ -188,6 +192,9 @@
 - (void)closeSection:(NSUInteger)sectionIndex animated:(BOOL)animated
 {
     [self setSectionAtIndex:sectionIndex open:NO];
+    if ([self.headerViewTapDelegate respondsToSelector:@selector(collapseTableView:didCloseSection:)]) {
+        [self.headerViewTapDelegate collapseTableView:self didCloseSection:sectionIndex];
+    }
 
     if (animated)
     {
@@ -339,11 +346,6 @@
     NSInteger index = tap.view.tag;
     if (index >= 0)
     {
-        if([self.headerViewTapDelegate respondsToSelector:@selector(collapseTableView:didSelectHeaderViewAtSection:)])
-        {
-            [self.headerViewTapDelegate collapseTableView:self didSelectHeaderViewAtSection:index];
-        }
-
         [self toggleSection:(NSUInteger)index animated:YES];
     }
 }
