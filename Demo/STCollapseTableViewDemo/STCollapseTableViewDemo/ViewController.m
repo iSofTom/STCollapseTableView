@@ -10,7 +10,7 @@
 
 #import "STCollapseTableView.h"
 
-@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate, STCollapseTableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet STCollapseTableView *tableView;
 
@@ -49,7 +49,7 @@
                         [UIColor greenColor],
                         [UIColor blueColor],
                         [UIColor purpleColor]];
-    
+
     self.data = [[NSMutableArray alloc] init];
     for (int i = 0 ; i < [colors count] ; i++)
     {
@@ -60,7 +60,7 @@
         }
         [self.data addObject:section];
     }
-    
+
     self.headers = [[NSMutableArray alloc] init];
     for (int i = 0 ; i < [colors count] ; i++)
     {
@@ -73,7 +73,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
+    self.tableView.headerViewTapDelegate = self;
     [self.tableView reloadData];
     [self.tableView openSection:0 animated:NO];
 }
@@ -81,45 +82,55 @@
 - (IBAction)handleExclusiveButtonTap:(UIButton*)button
 {
     [self.tableView setExclusiveSections:!self.tableView.exclusiveSections];
-    
+
     [button setTitle:self.tableView.exclusiveSections?@"exclusive":@"!exclusive" forState:UIControlStateNormal];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-	return [self.data count];
+    return [self.data count];
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	static NSString* cellIdentifier = @"cell";
-	
-	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-	
-	if (!cell)
+    static NSString* cellIdentifier = @"cell";
+
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+
+    if (!cell)
     {
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
-	}
-	
-	NSString* text = [[self.data objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-	cell.textLabel.text = text;
-	
-	return cell;
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
+    }
+
+    NSString* text = [[self.data objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    cell.textLabel.text = text;
+
+    return cell;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [[self.data objectAtIndex:section] count];
+    return [[self.data objectAtIndex:section] count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-	return 40;
+    return 40;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     return [self.headers objectAtIndex:section];
+}
+
+- (void)STCollapseTableView:(STCollapseTableView *)STCollapseTableView didSelectHeaderViewAtSection:(NSInteger)section
+{
+    [[[UIAlertView alloc] initWithTitle:@""
+                                message:[NSString stringWithFormat:@"headerView %ld tapped",section]
+                               delegate:nil
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil, nil]
+     show];
 }
 
 @end

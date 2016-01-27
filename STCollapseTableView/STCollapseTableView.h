@@ -29,6 +29,16 @@
  ***********************************************************************************/
 
 #import <UIKit/UIKit.h>
+@class STCollapseTableView;
+
+@protocol STCollapseTableViewDelegate <NSObject>
+
+@optional
+
+- (void)collapseTableView:(STCollapseTableView *)collapseTableView didOpenSection:(NSInteger)section;
+- (void)collapseTableView:(STCollapseTableView *)collapseTableView didCloseSection:(NSInteger)section;
+
+@end
 
 /**
  *	STCollapseTableView is a UITableView subclass that automatically collapse and/or expand your sections.
@@ -85,5 +95,7 @@
  *	@return	YES if the section is open.
  */
 - (BOOL)isOpenSection:(NSUInteger)sectionIndex;
+
+@property (nonatomic, weak) id<STCollapseTableViewDelegate> headerViewTapDelegate;
 
 @end
