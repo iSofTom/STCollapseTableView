@@ -45,7 +45,7 @@ This is automatically done for you in three conditions:
 
 ## Installation
 
-To include this component in your project, I recommend you to use [Cocoapods](http://cocoapods.org):
+To include this component in your project, I recommend you to use [CocoaPods](http://cocoapods.org):
 * Add `pod "STCollapseTableView"` to your Podfile.
 
 ## How does it work ?
