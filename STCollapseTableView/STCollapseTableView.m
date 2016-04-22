@@ -81,7 +81,7 @@
 
 - (void)setDataSource:(id <UITableViewDataSource>)newDataSource
 {
-	if (newDataSource != self.collapseDataSource)
+	if (newDataSource && newDataSource != self.collapseDataSource)
     {
 		self.collapseDataSource = newDataSource;
 		[self.sectionsStates removeAllObjects];
@@ -91,7 +91,7 @@
 
 - (void)setDelegate:(id<UITableViewDelegate>)newDelegate
 {
-    if (newDelegate != self.collapseDelegate)
+    if (newDelegate && newDelegate != self.collapseDelegate)
     {
         self.collapseDelegate = newDelegate;
         [super setDelegate:self.collapseDelegate?self:nil];
@@ -117,7 +117,7 @@
     {
         return [self.collapseDelegate respondsToSelector:aSelector];
     }
-    
+
 	return [super respondsToSelector:aSelector] || [self.collapseDataSource respondsToSelector:aSelector] || [self.collapseDelegate respondsToSelector:aSelector];
 }
 
@@ -127,27 +127,27 @@
     {
         return;
     }
-    
+
     if ([[self.sectionsStates objectAtIndex:sectionIndex] boolValue])
     {
         return;
     }
-	
+
 	if (self.exclusiveSections)
     {
         NSUInteger openedSection = [self openedSection];
-        
+
 		[self setSectionAtIndex:sectionIndex open:YES];
 		[self setSectionAtIndex:openedSection open:NO];
-        
+
         if(animated)
 		{
             NSArray* indexPathsToInsert = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
             NSArray* indexPathsToDelete = [self indexPathsForRowsInSectionAtIndex:openedSection];
-            
+
             UITableViewRowAnimation insertAnimation;
             UITableViewRowAnimation deleteAnimation;
-            
+
             if (openedSection == NSNotFound || sectionIndex < openedSection)
             {
                 insertAnimation = UITableViewRowAnimationTop;
@@ -158,7 +158,7 @@
                 insertAnimation = UITableViewRowAnimationBottom;
                 deleteAnimation = UITableViewRowAnimationTop;
             }
-            
+
             [self beginUpdates];
             [self insertRowsAtIndexPaths:indexPathsToInsert withRowAnimation:insertAnimation];
             [self deleteRowsAtIndexPaths:indexPathsToDelete withRowAnimation:deleteAnimation];
@@ -172,7 +172,7 @@
     else
     {
 		[self setSectionAtIndex:sectionIndex open:YES];
-		
+
 		if (animated)
         {
             NSArray* indexPathsToInsert = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
@@ -188,7 +188,7 @@
 - (void)closeSection:(NSUInteger)sectionIndex animated:(BOOL)animated
 {
     [self setSectionAtIndex:sectionIndex open:NO];
-	
+
 	if (animated)
     {
         NSArray* indexPathsToDelete = [self indexPathsForRowsInSectionAtIndex:sectionIndex];
@@ -206,9 +206,9 @@
     {
 		return;
 	}
-	
+
 	BOOL sectionIsOpen = [[self.sectionsStates objectAtIndex:sectionIndex] boolValue];
-	
+
 	if (sectionIsOpen)
     {
 		[self closeSection:sectionIndex animated:animated];
@@ -231,11 +231,11 @@
 - (void)setExclusiveSections:(BOOL)exclusiveSections
 {
     _exclusiveSections = exclusiveSections;
-    
+
     if (self.exclusiveSections)
     {
         NSInteger firstSection = NSNotFound;
-        
+
         for (NSUInteger index = 0 ; index < [self.sectionsStates count] ; index++)
         {
             if ([[self.sectionsStates objectAtIndex:index] boolValue])
@@ -272,17 +272,17 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
 	int nbSection = [self.collapseDataSource numberOfSectionsInTableView:tableView];
-    
+
 	while (nbSection < [self.sectionsStates count])
     {
 		[self.sectionsStates removeLastObject];
 	}
-    
+
 	while (nbSection > [self.sectionsStates count])
     {
 		[self.sectionsStates addObject:@NO];
 	}
-    
+
 	return nbSection;
 }
 
@@ -291,7 +291,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView* view = [self.collapseDelegate tableView:tableView viewForHeaderInSection:section];
-    
+
     if (self.shouldHandleHeadersTap)
     {
         NSArray* gestures = view.gestureRecognizers;
@@ -304,14 +304,14 @@
                 break;
             }
         }
-        
+
         if (!tapGestureFound)
         {
             [view setTag:section];
             [view addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)]];
         }
     }
-    
+
     return view;
 }
 
@@ -332,16 +332,16 @@
     {
 		return nil;
 	}
-	
+
 	NSInteger numberOfRows = [self.collapseDataSource tableView:self numberOfRowsInSection:sectionIndex];
-	
+
 	NSMutableArray* array = [[NSMutableArray alloc] init];
-	
+
 	for (int i = 0 ; i < numberOfRows ; i++)
     {
 		[array addObject:[NSIndexPath indexPathForRow:i inSection:sectionIndex]];
 	}
-    
+
     return array;
 }
 
@@ -351,7 +351,7 @@
     {
 		return;
 	}
-	
+
 	[self.sectionsStates replaceObjectAtIndex:sectionIndex withObject:@(open)];
 }
 
@@ -361,7 +361,7 @@
     {
         return NSNotFound;
     }
-    
+
     for (NSUInteger index = 0 ; index < [self.sectionsStates count] ; index++)
     {
         if ([[self.sectionsStates objectAtIndex:index] boolValue])
@@ -369,7 +369,7 @@
             return index;
         }
     }
-    
+
     return NSNotFound;
 }
 
